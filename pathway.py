@@ -33,7 +33,7 @@ class Pathway:
         interactions: typing.List = []
 
         for h4 in self.__html.find_all(name, attrs):
-            interaction: str = h4.text.split('.')[0]
+            interaction: typing.List[str] = h4.text.split('.')
             interactions.append(interaction)
 
         return interactions
@@ -45,7 +45,7 @@ class Pathway:
         reactions: typing.List = []
 
         for b in self.__html.find_all(name)[8:]:
-            reaction: str = b.text.split()[0]
+            reaction: typing.List[str] = b.text.split(' ', 1)
             reactions.append(reaction)
         
         return reactions
@@ -62,3 +62,24 @@ class Pathway:
             relations.append(relation)
             
         return relations
+
+    def pathways(self) -> typing.List[typing.Dict[str, str]]:
+        pathways: typing.List = []
+
+        for interaction in self.interactions():
+            for index, reaction in enumerate(self.reactions()):
+                if reaction[0].startswith(interaction[0]):
+                    for relation in self.relations()[index]:
+                        pathway: typing.Dict[str, str] = {
+                            'interaction_map': interaction[0],
+                            'interaction_name': interaction[1],
+                            'reaction_map': reaction[0],
+                            'reaction_name': reaction[1],
+                            'relation_map': relation
+                        }
+                        pathways.append(pathway)
+        
+        return pathways
+    
+for i in Pathway().pathways():
+    print(i)
