@@ -10,6 +10,9 @@ class Pathway:
 
     @staticmethod
     def __response() -> str:
+        """
+        :return:
+        """
         url: str = 'https://www.kegg.jp/kegg/pathway.html'
 
         response: requests.Response = requests.get(url)
@@ -20,66 +23,92 @@ class Pathway:
     
     @staticmethod
     def __beautiful_soup() -> bs4.BeautifulSoup:
+        """
+        :return:
+        """
         markup: str = Pathway.__response()
         features: str = 'html.parser'
 
         return bs4.BeautifulSoup(markup, features)
     
 
-    def interactions(self) -> typing.List[str]:
+    @classmethod
+    def __interactions(cls) -> typing.List[str]:
+        """
+        :return:
+        """
         name: str = 'h4'
         attrs: typing.Dict[str, bool] = {'id': True}
 
         interactions: typing.List = []
 
-        for h4 in self.__html.find_all(name, attrs):
-            interaction: typing.List[str] = h4.text.split('.')
+        for element in cls.__html.find_all(name, attrs):
+            element: typing.List[str] = element.text.split(maxsplit=1)
+
+            interaction: typing.Dict[str, str] = {
+                'entry': element[0][0],
+                'name': element[1]
+            }
             interactions.append(interaction)
 
         return interactions
     
 
-    def reactions(self) -> typing.List[str]:
+    @classmethod
+    def __reactions(cls) -> typing.List[str]:
+        """
+        :return:
+        """
         name: str = 'b'
 
         reactions: typing.List = []
 
-        for b in self.__html.find_all(name)[8:]:
-            reaction: typing.List[str] = b.text.split(' ', 1)
+        for element in cls.__html.find_all(name)[8:]:
+            element: typing.List[str] = element.text.split(maxsplit=1)
+
+            reaction: typing.Dict[str, str] = {
+                'entry': element[0],
+                'name': element[1]
+            }
             reactions.append(reaction)
         
         return reactions
     
 
-    def relations(self) -> typing.List[typing.List[str]]: 
+    @classmethod
+    def __relations(cls) -> typing.List[typing.List[str]]: 
+        """
+        :return:
+        """
         name: str = 'div'
         attrs: typing.Dict[str, str] = {'class': 'list'}
 
         relations: typing.List = []
+        
+        for element in cls.__html.find_all(name, attrs):
+            element: typing.List[str] = element.text.split('\n')
 
-        for div in self.__html.find_all(name, attrs):
-            relation: typing.List[str] = [relation[:5] for relation in div.text.split('\n') if relation != '']
+            relation: typing.List[str] = [relation[:5] for relation in element if relation != '']
             relations.append(relation)
             
         return relations
 
+
     def pathways(self) -> typing.List[typing.Dict[str, str]]:
+        """
+        :return:
+        """
         pathways: typing.List = []
 
-        for interaction in self.interactions():
-            for index, reaction in enumerate(self.reactions()):
-                if reaction[0].startswith(interaction[0]):
-                    for relation in self.relations()[index]:
+        for interaction in self.__interactions():
+            for index, reaction in enumerate(self.__reactions()):
+                if reaction['entry'].startswith(interaction['entry']):
+                    for relation in self.__relations()[index]:
                         pathway: typing.Dict[str, str] = {
-                            'interaction_map': interaction[0],
-                            'interaction_name': interaction[1],
-                            'reaction_map': reaction[0],
-                            'reaction_name': reaction[1],
-                            'relation_map': relation
+                            'interaction': interaction,
+                            'reaction': reaction,
+                            'relation': relation
                         }
                         pathways.append(pathway)
         
         return pathways
-    
-for i in Pathway().pathways():
-    print(i)
