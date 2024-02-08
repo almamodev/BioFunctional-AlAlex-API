@@ -32,83 +32,80 @@ class Pathway:
         return bs4.BeautifulSoup(markup, features)
     
 
-    @classmethod
-    def __interactions(cls) -> typing.List[str]:
+    def __interaction(self) -> typing.List[str]:
         """
         :return:
         """
         name: str = 'h4'
         attrs: typing.Dict[str, bool] = {'id': True}
 
-        interactions: typing.List = []
+        collection: typing.List = []
 
-        for element in cls.__html.find_all(name, attrs):
+        for element in self.__html.find_all(name, attrs):
             element: typing.List[str] = element.text.split(maxsplit=1)
 
             interaction: typing.Dict[str, str] = {
                 'entry': element[0][0],
                 'name': element[1]
             }
-            interactions.append(interaction)
+            collection.append(interaction)
 
-        return interactions
+        return collection
     
 
-    @classmethod
-    def __reactions(cls) -> typing.List[str]:
+    def __reaction(self) -> typing.List[str]:
         """
         :return:
         """
         name: str = 'b'
 
-        reactions: typing.List = []
+        collection: typing.List = []
 
-        for element in cls.__html.find_all(name)[8:]:
+        for element in self.__html.find_all(name)[8:]:
             element: typing.List[str] = element.text.split(maxsplit=1)
 
             reaction: typing.Dict[str, str] = {
                 'entry': element[0],
                 'name': element[1]
             }
-            reactions.append(reaction)
+            collection.append(reaction)
         
-        return reactions
+        return collection
     
 
-    @classmethod
-    def __relations(cls) -> typing.List[typing.List[str]]: 
+    def __relation(self) -> typing.List[typing.List[str]]: 
         """
         :return:
         """
         name: str = 'div'
         attrs: typing.Dict[str, str] = {'class': 'list'}
 
-        relations: typing.List = []
+        collection: typing.List = []
         
-        for element in cls.__html.find_all(name, attrs):
+        for element in self.__html.find_all(name, attrs):
             element: typing.List[str] = element.text.split('\n')
 
             relation: typing.List[str] = [relation[:5] for relation in element if relation != '']
-            relations.append(relation)
+            collection.append(relation)
             
-        return relations
+        return collection
 
 
-    def pathways(self) -> typing.List[typing.Dict[str, str]]:
+    def collection(self) -> typing.List[typing.Dict[str, str]]:
         """
         :return:
         """
-        pathways: typing.List = []
+        collection: typing.List = []
 
-        for interaction in self.__interactions():
-            for index, reaction in enumerate(self.__reactions()):
+        for interaction in self.__interaction():
+            for index, reaction in enumerate(self.__reaction()):
                 if reaction['entry'].startswith(interaction['entry']):
-                    for relation in self.__relations()[index]:
+                    for relation in self.__relation()[index]:
                         pathway: typing.Dict[str, str] = {
                             'interaction': interaction,
                             'reaction': reaction,
                             'relation': relation
                         }
-                        pathways.append(pathway)
+                        collection.append(pathway)
         
-        return pathways
+        return collection
