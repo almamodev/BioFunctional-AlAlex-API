@@ -2,11 +2,9 @@ import bs4
 import requests
 import typing
 
-
 class Pathway:
     def __init__(self) -> None:
         self.__html: bs4.BeautifulSoup = Pathway.__beautiful_soup()
-
 
     @staticmethod
     def __response() -> str:
@@ -20,7 +18,6 @@ class Pathway:
 
         return response.text
         
-    
     @staticmethod
     def __beautiful_soup() -> bs4.BeautifulSoup:
         """
@@ -31,7 +28,6 @@ class Pathway:
 
         return bs4.BeautifulSoup(markup, features)
     
-
     def __interaction(self) -> typing.List[str]:
         """
         :return:
@@ -51,7 +47,6 @@ class Pathway:
             collection.append(interaction)
 
         return collection
-    
 
     def __reaction(self) -> typing.List[str]:
         """
@@ -72,7 +67,6 @@ class Pathway:
         
         return collection
     
-
     def __relation(self) -> typing.List[typing.List[str]]: 
         """
         :return:
@@ -89,7 +83,6 @@ class Pathway:
             collection.append(relation)
             
         return collection
-
 
     def collection(self) -> typing.List[typing.Dict[str, str]]:
         """
