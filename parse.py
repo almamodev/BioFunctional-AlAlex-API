@@ -1,20 +1,19 @@
 import typing
 import csv
 import werkzeug.datastructures
+import io
 
 class Parse:
-    def __init__(self, files: werkzeug.datastructures.FileStorage) -> None:
-        self.__files = files
+    def __init__(self, file: str) -> None:
+        self.__file = file
 
     def writer(self, rowdicts: typing.List[typing.Dict[str, typing.Any]]) -> None:
         """
         :rowdicts:
         """
-        with open(self.__files, 'w', newline='') as f:
-            fieldnames: typing.List[str] = rowdicts[0].keys()
-
+        fieldnames: typing.List[str] = list(rowdicts[0].keys())
+        with open(self.__file, 'w', newline='') as f:
             writer: csv.DictWriter = csv.DictWriter(f, fieldnames)
-
             writer.writeheader()
             writer.writerows(rowdicts)
             
@@ -22,12 +21,9 @@ class Parse:
         """
         :return:        
         """
-        rowdicts: typing.List = []
-
-        with open(self.__files, 'r', newline='') as f:
+        rowdicts: typing.List[typing.Dict[str, typing.Any]] = []
+        with open(self.__file, 'r', newline='') as f:
             reader: csv.DictReader = csv.DictReader(f)
-
             for row in reader:
                 rowdicts.append(row)
-
         return rowdicts
