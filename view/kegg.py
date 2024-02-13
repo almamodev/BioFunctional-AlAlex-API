@@ -7,7 +7,6 @@ import flask
 import typing
 import werkzeug.datastructures
 import os
-import marshmallow
 
 blueprint: flask_smorest.Blueprint = flask_smorest.Blueprint('kegg', __name__)
 
@@ -36,15 +35,11 @@ class KeggView(flask.views.MethodView):
             parser.writer(rowdicts)
 
             response: flask.Response = flask.send_file(filename, as_attachment=True)
-
-            os.remove(filename)
             
             return response
         except KeyError:
-            flask.abort(404)
-        except marshmallow.ValidationError:
-            flask.abort(415)
-
+            code: int = 404
+            flask.abort(code)
         
         
 

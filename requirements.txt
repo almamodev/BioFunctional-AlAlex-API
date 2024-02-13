@@ -1,0 +1,4 @@
+flask
+flask-smorest
+flask-cors
+bs4

@@ -1,6 +1,7 @@
 import marshmallow
 import typing
 import werkzeug.datastructures
+import flask_smorest
 
 class FileSchema(marshmallow.Schema):
     __metadata: typing.Dict[str, str] = {
@@ -16,4 +17,5 @@ class FileSchema(marshmallow.Schema):
         filename: str = file.filename
 
         if not filename.endswith('.csv'):
-            raise marshmallow.ValidationError()                
+            code: int = 415
+            flask_smorest.abort(code)           
