@@ -9,13 +9,18 @@ class FileSchema(marshmallow.Schema):
         'format': 'binary'
     }
     __required=True
-
-    file = marshmallow.fields.Raw(metadata=__metadata, required=__required)
+    file:  marshmallow.fields.Raw = marshmallow.fields.Raw(metadata=__metadata, required=__required)
     
     @marshmallow.validates('file')
     def validates(self, file: werkzeug.datastructures.FileStorage) -> None:
+        """
+        Validates the file field for CSV format.
+        
+        :file: The FileStorage object representing the uploaded file.
+        """
         filename: str = file.filename
-
-        if not filename.endswith('.csv'):
+        suffix: str = '.csv'
+        if not filename.endswith(suffix):
             code: int = 415
-            flask_smorest.abort(code)           
+            message: str = 'Content-Type allowed: text/csv'
+            flask_smorest.abort(code, message=message)           
