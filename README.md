@@ -6,7 +6,7 @@ The BioFunctional AlAlex API is a Flask-based web service designed to interact w
 
 ## Installation
 
-To set up the KEGG API, follow these steps:
+To set up the BioFunctional AlAlex API, follow these steps:
 
 1. Clone this repository to your local machine.
 2. Install the required Python packages using pip:
@@ -25,23 +25,23 @@ To set up the KEGG API, follow these steps:
 
 ### Uploading Files
 
-You can upload files to the KEGG API using a POST request to the `/kegg` endpoint. The file should be provided as part of the request payload.
+You can upload csv files to the BioFunctional AlAlex API using a POST request to the `/kegg` endpoint. The file should be provided as part of the request payload.
 
 ### Processing Pathways
 
-Once a file is uploaded, the API processes the pathway information contained within the file. It extracts interactions, reactions, and relations from the KEGG database.
+Once a file is uploaded, the BioFunctional AlAlex API processes the pathway information contained within the file. It extracts interactions, reactions, and relations from the KEGG database.
 
 ### Updating Data
 
-The API updates the uploaded file based on the pathway information obtained. It identifies relevant data in the file and modifies it to include pathway interactions and reactions.
+The BioFunctional AlAlex API updates the uploaded file based on the pathway information obtained. It identifies relevant data in the file and modifies it to include pathway interactions and reactions.
 
 ### Error Handling
 
-The API handles various error scenarios, such as missing columns in the uploaded file and request exceptions during pathway processing.
+The BioFunctional AlAlex API handles various error scenarios, such as missing columns in the uploaded file and request exceptions during pathway processing.
 
 ## Dependencies
 
-The KEGG API relies on the following Python packages:
+The BioFunctional AlAlex API relies on the following Python packages:
 
 - Flask: A lightweight web framework for building web applications.
 - Flask-Smorest: An extension for Flask that adds support for OpenAPI documentation.
