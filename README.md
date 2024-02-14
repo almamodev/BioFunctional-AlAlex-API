@@ -51,9 +51,9 @@ The KEGG API relies on the following Python packages:
 
 ## Contributors
 
-- [Albert Martín Moreno]
-- [Alejandro Rodriguez Mena]
-- [Antonio Monleon Getino]
+- Albert Martín Moreno
+- Alejandro Rodriguez Mena
+- Antonio Monleon Getino
 
 ## License
 
