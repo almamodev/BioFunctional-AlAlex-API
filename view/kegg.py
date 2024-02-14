@@ -32,7 +32,7 @@ class KeggView(flask.views.MethodView):
             collection: typing.List[typing.Dict[str, str]] = pathway.collection()
             for map in collection:
                 for row in rowdicts:
-                    if row['relation'][2:] in map['ONTOLOGY']:
+                    if row['ONTOLOGY'][2:] in map['relation']:
                         row['interaction'] = map['interaction']['name']
                         row['reaction'] = map['reaction']['name']
             parser.writer(rowdicts)
@@ -41,14 +41,10 @@ class KeggView(flask.views.MethodView):
         except KeyError:
             code: int = 404
             message: str = "Column name allowed: 'ONTOLOGY'"
-            flask.abort(code, message=message)
+            flask_smorest.abort(code, message=message)
         except requests.RequestException as exception:
             code: int = exception.response.status_code
             flask_smorest.abort(code)
-        
-        
-
-        
         
 
         
